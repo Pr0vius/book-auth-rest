@@ -5,7 +5,7 @@ const router = Router();
 const { userRegister, userLogin, getUser } = require("../controllers/user.controller");
 
 router.get("/", authSecurity, getUser);
-router.post("/singin", userLogin);
-router.post("/singup", userRegister);
+router.post("/login", userLogin);
+router.post("/register", userRegister);
 
 module.exports = router;

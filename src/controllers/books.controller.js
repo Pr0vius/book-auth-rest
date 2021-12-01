@@ -20,10 +20,7 @@ exports.postBook = async (req, res, next) => {
     });
   } catch (err) {
     next(
-      new ErrorResponse(
-        "Error: Can't create the book now: " + err.message,
-        500,
-      ),
+      new ErrorResponse("Error: Can't create the book now: " + err.message, 500)
     );
   }
 };
@@ -33,10 +30,13 @@ exports.getBook = async (req, res, next) => {
     const book = await BOOK.findById(req.params.id);
     if (!book) {
       return next(
-        new ErrorResponse("Book Not Fount ID: " + req.params.id, 404),
+        new ErrorResponse("Book Not Fount ID: " + req.params.id, 404)
       );
     }
-    res.status(200).json({ book });
+    res.status(200).json({
+      status: 200,
+      data: book,
+    });
   } catch (err) {
     next(new ErrorResponse("Can't find book list" + err.message, 400));
   }
@@ -47,10 +47,10 @@ exports.putBook = async (req, res, next) => {
     const book = await BOOK.findByIdAndUpdate(req.params.id, req.body);
     if (!book) {
       return next(
-        new ErrorResponse("Book Not Fount ID: " + req.params.id, 404),
+        new ErrorResponse("Book Not Fount ID: " + req.params.id, 404)
       );
     }
-    res.status(200).json({ author });
+    res.status(200).json({ status: 200, data: book });
   } catch (err) {
     next(new ErrorResponse("Book Not Fount ID: " + req.params.id, 404));
   }
@@ -61,10 +61,10 @@ exports.deleteBook = async (req, res, next) => {
     const book = await BOOK.findByIdAndDelete(req.params.id);
     if (!book) {
       return next(
-        new ErrorResponse("Book Not Fount ID: " + req.params.id, 404),
+        new ErrorResponse("Book Not Fount ID: " + req.params.id, 404)
       );
     }
-    res.status(200).json({ book });
+    res.status(200).json({ status: 200, data: book });
   } catch (err) {
     next(new ErrorResponse("Book Not Fount ID: " + req.params.id, 404));
   }
@@ -73,7 +73,6 @@ exports.deleteBook = async (req, res, next) => {
 //PAGINATION
 exports.pagination = async (req, res, next) => {
   try {
-
     const sort = req.body.sort;
     const sortDirection = req.body.sortDirection;
     const page = parseInt(req.body.page);
@@ -95,15 +94,14 @@ exports.pagination = async (req, res, next) => {
       Books = await BOOK.find({
         [filterProp]: new RegExp(FilterValue, "i"),
       })
-      .sort({ [sort]: sortDirection })
-      .skip((page - 1) * pageSize)
-      .limit(pageSize);
+        .sort({ [sort]: sortDirection })
+        .skip((page - 1) * pageSize)
+        .limit(pageSize);
 
       totalRows = await BOOK.find({
-        [filterProp]: new RegExp(FilterValue, "i")
+        [filterProp]: new RegExp(FilterValue, "i"),
       }).count();
-      console.log(totalRows)
-
+      console.log(totalRows);
     } else {
       Books = await BOOK.find()
         .sort({ [sort]: sortDirection })
@@ -113,7 +111,7 @@ exports.pagination = async (req, res, next) => {
     }
 
     res.status(200).json({
-      status:200,
+      status: 200,
       pageSize,
       page,
       sort,
@@ -121,9 +119,11 @@ exports.pagination = async (req, res, next) => {
       //filterValue,
       pagesQuantity,
       totalRows,
-      data: Books
-    })
+      data: Books,
+    });
   } catch {
-    next(new ErrorResponse("Couldn't procces the request: " + req.params.id, 404));
+    next(
+      new ErrorResponse("Couldn't procces the request: " + req.params.id, 404)
+    );
   }
 };

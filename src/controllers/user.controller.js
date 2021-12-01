@@ -17,12 +17,14 @@ exports.userRegister = async (req, res, next) => {
 
     res.status(200).json({
       status: 200,
-      id: usr._id,
-      firstname,
-      lastname,
-      username,
-      email,
-      token: token,
+      data: {
+        id: usr._id,
+        firstname,
+        lastname,
+        username,
+        email,
+        token: token,
+      },
     });
   } catch (err) {
     next(new ErrorResponse("Error on Response: " + err, 400));
@@ -52,31 +54,35 @@ exports.userLogin = async (req, res, next) => {
 
     res.status(200).json({
       status: 200,
-      id: user._id,
-      firstname: user.firstname,
-      lastname: user.lastname,
-      username: user.username,
-      email: user.email,
-      token: token,
+      data: {
+        id: user._id,
+        firstname: user.firstname,
+        lastname: user.lastname,
+        username: user.username,
+        email: user.email,
+        token: token,
+      },
     });
   } catch (err) {
     next(new ErrorResponse("Error on Response: " + err, 400));
   }
 };
 
-exports.getUser = async(req, res, next) => {
+exports.getUser = async (req, res, next) => {
   try {
     const userToken = req.user;
     const token = await userToken.createJWT();
 
     res.status(200).json({
       status: 200,
-      id: userToken._id,
-      firstname: userToken.firstname,
-      lastname: userToken.lastname,
-      username: userToken.username,
-      email: userToken.email,
-      token: token,
+      data: {
+        id: userToken._id,
+        firstname: userToken.firstname,
+        lastname: userToken.lastname,
+        username: userToken.username,
+        email: userToken.email,
+        token: token,
+      },
     });
   } catch (err) {
     next(new ErrorResponse("Error on Response: " + err, 400));

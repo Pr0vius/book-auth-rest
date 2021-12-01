@@ -10,7 +10,7 @@ exports.createAuthor = async (req, res, next) => {
     });
   } catch (err) {
     next(
-      new ErrorResponse("Error: Can't create author now: " + err.message, 500),
+      new ErrorResponse("Error: Can't create author now: " + err.message, 500)
     );
   }
 };
@@ -18,10 +18,10 @@ exports.createAuthor = async (req, res, next) => {
 exports.getAuthors = async (req, res, next) => {
   try {
     const authorList = await Author.find();
-    res.status(200).json( authorList );
+    res.status(200).json({ status: 200, data: authorList });
   } catch (err) {
     next(
-      new ErrorResponse("Error: Can't find authors now: " + err.message, 500),
+      new ErrorResponse("Error: Can't find authors now: " + err.message, 500)
     );
   }
 };
@@ -31,16 +31,18 @@ exports.getAuthor = async (req, res, next) => {
     const author = await Author.findById(req.params.id);
     if (!author) {
       return next(
-        new ErrorResponse("Author Not Fount ID: " + req.params.id, 404),
+        new ErrorResponse("Author Not Fount ID: " + req.params.id, 404)
       );
     }
-    res.status(200).json({ author });
+    res.status(200).json({ status: 200, data: author });
   } catch (err) {
     next(
       new ErrorResponse(
-        "Author Not Fount ID: " +req.params.id +", please write a correct Author ID",
-        404,
-      ),
+        "Author Not Fount ID: " +
+          req.params.id +
+          ", please write a correct Author ID",
+        404
+      )
     );
   }
 };
@@ -50,10 +52,10 @@ exports.putAuthor = async (req, res, next) => {
     const author = await Author.findByIdAndUpdate(req.params.id, req.body);
     if (!author) {
       return next(
-        new ErrorResponse("Author Not Fount ID: " + req.params.id, 404),
+        new ErrorResponse("Author Not Fount ID: " + req.params.id, 404)
       );
     }
-    res.status(200).json({ author });
+    res.status(200).json({ status: 200, data: author });
   } catch (err) {
     next(new ErrorResponse("Author Not Fount ID: " + req.params.id, 404));
   }
@@ -64,10 +66,10 @@ exports.deleteAuthor = async (req, res, next) => {
     const author = await Author.findByIdAndDelete(req.params.id);
     if (!author) {
       return next(
-        new ErrorResponse("Author Not Fount ID: " + req.params.id, 404),
+        new ErrorResponse("Author Not Fount ID: " + req.params.id, 404)
       );
     }
-    res.status(200).json({ author });
+    res.status(200).json({ status: 200, data: 'Author Deleted' });
   } catch (err) {
     next(new ErrorResponse("Author Not Fount ID: " + req.params.id, 404));
   }
